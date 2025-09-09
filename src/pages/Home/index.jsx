@@ -1,4 +1,4 @@
-import './style.css'
+import '../style.css'
 
 import Lixeira from '../../assets/lixeira.svg'
 
@@ -6,13 +6,14 @@ function Home(){
   const usuarios =[
     {
       id: '0001',
-      nome: 'Carol',
-      idade: 18,
-      emial: 'carol@gmail.com'
+      nome: 'Enzo',
+      idade: 17,
+      email: 'enzo@gmail.com'
     },     {
       id: '002',
-      nome: 'Isa',
-      idade: 14,
+      nome: 'Heloysa',
+      idade: 17,
+      email: 'heloysa@gmail.com'
     }
   ]
  
