@@ -1,8 +1,10 @@
 import './style.css'
 import { useEffect, useState, useRef } from 'react'
-import Lixeira from '../../assets/lixeira.svg'
 import api from '../../services/api'
 import Edit from '../../assets/edit.png'
+import Save from '../../assets/save.png'
+import Cancel from '../../assets/cancel.png'
+import Lixeira from '../../assets/lixeira.svg'
 
 function Home(){
   // const usuarios =[
@@ -20,6 +22,8 @@ function Home(){
   // ]
 
   const [usuarios, setUsuarios] = useState([])
+  const [editingId, setEditingId] = useState(null)
+  const [editedUser , setEditedUser ] = useState({})
 
   const inputNome = useRef()
   const inputIdade = useRef()
@@ -53,18 +57,20 @@ function Home(){
     getUsuarios()
   }
 
-    async function atualizaUsuarios(id) {
-    const atualNome = prompt('Alterar nome:')
-    const atualIdade = prompt('Alterar idade:')
-    const atualEmail = prompt('Alterar email:')
-    if (atualNome && atualIdade && atualEmail) {
-      await api.put(`/cadastro/${id}`, {
-        nome: atualNome,
-        idade: atualIdade,
-        email: atualEmail
-      })
-      getUsuarios() 
-    }
+  function handleEdit(id) {
+    const user = usuarios.find(u => u.id === id)
+    setEditedUser (user)
+    setEditingId(id)
+  }
+  async function handleSave(id) {
+    await api.put(`/cadastro/${id}`, editedUser )
+    getUsuarios()
+    setEditingId(null)
+    setEditedUser ({})
+  }
+  function handleCancel() {
+    setEditingId(null)
+    setEditedUser ({})
   }
 
   useEffect(() => {
@@ -84,17 +90,53 @@ function Home(){
 
       {usuarios.map(usuario => (
         <div key={usuario.id} className='card'>
-          <div>
-            <p>Nome: {usuario.nome}</p>
-            <p>Idade: {usuario.idade}</p>
-            <p>Email: {usuario.email}</p>
-          </div>
-          <button onClick={() => deleteUsuarios(usuario.id)} className='btn-deletar'>
-            <img src={Lixeira} />
-          </button>
-          {<button onClick={() => atualizaUsuarios(usuario.id)} className='btn-atualizar'>
-            <img src={Edit} />
-          </button>}
+          {editingId === usuario.id ? (
+            <div className='edit-mode'>
+              <div className='card-list'>
+                <input className='input-edit'
+                value={editedUser .nome || ''} 
+                onChange={(e) => setEditedUser ({...editedUser , nome: e.target.value})} 
+                placeholder="Nome" 
+              />
+              <input className='input-edit'
+                value={editedUser .idade || ''} 
+                onChange={(e) => setEditedUser ({...editedUser , idade: e.target.value})} 
+                placeholder="Idade" 
+                type="number" 
+              />
+              <input className='input-edit'
+                value={editedUser .email || ''} 
+                onChange={(e) => setEditedUser ({...editedUser , email: e.target.value})} 
+                placeholder="Email" 
+                type="email" 
+              />
+              </div>
+              <div className='card-buttons'>
+                <button onClick={() => handleSave(usuario.id)} className='btn-salvar'>
+                  <img src={Save} alt="Salvar" />
+                </button>
+                <button onClick={handleCancel} className='btn-cancelar'>
+                  <img src={Cancel} alt="Cancelar" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p>Nome: {usuario.nome}</p>
+              <p>Idade: {usuario.idade}</p>
+              <p>Email: {usuario.email}</p>
+            </div>
+          )}
+          {editingId !== usuario.id && (
+            <>
+              <button onClick={() => deleteUsuarios(usuario.id)} className='btn-deletar'>
+                <img src={Lixeira} alt="Deletar" />
+              </button>
+              <button onClick={() => handleEdit(usuario.id)} className='btn-atualizar'>
+                <img src={Edit} alt="Editar" />
+              </button>
+            </>
+          )}
         </div>
       ))}
     </div>

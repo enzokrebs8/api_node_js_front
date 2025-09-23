@@ -51,6 +51,39 @@ form {
   }
 }
 
+.edit-mode{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.input-edit{
+  border: 1px solid #454f6c;
+  border-radius: 30px;
+  height: 20px;
+  background-color: #333369;
+  color: #fff;
+  font-size: 16px;
+  padding-left: 10px;
+  outline: none;
+  margin: 5px;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.card-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .card {
   display: flex;
   justify-content: space-between;
