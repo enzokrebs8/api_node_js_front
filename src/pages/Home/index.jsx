@@ -1,7 +1,13 @@
 import './style.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Lixeira from '../../assets/lixeira.svg'
 import api from '../../services/api'
+
+// import { useEffect, useState,  } from 'react'
+// import './style.css'
+// import Lixeira from '../../assets/lixeira.png'
+// import api from '../../services/api'
+// import Atualizar from '../../assets/atualiza.png'
 
 function Home(){
   // const usuarios =[
@@ -20,6 +26,10 @@ function Home(){
 
   const [usuarios, setUsuarios] = useState([])
 
+  const inputNome = useRef()
+  const inputIdade = useRef()
+  const inputEmail = useRef()
+
   //let usuarios = []
 
   async function getUsuarios(){
@@ -28,34 +38,54 @@ function Home(){
     setUsuarios(usuariosDaApi.data)
     console.log(usuarios)
   }
- 
+  
+  async function createUsuarios() {
+    await api.post('/cadastro', {
+      nome: inputNome.current.value,
+      idade: inputIdade.current.value,
+      email: inputEmail.current.value
+    })
+    getUsuarios()// <- atualiza a lista
+
+    //vai limpar os campos
+    inputNome.current.value = ""
+    inputIdade.current.value = ""
+    inputEmail.current.value = ""
+  }
+
+  async function deleteUsuarios(id) {
+    await api.delete(`/cadastro/${id}`)
+    getUsuarios()// <- atualiza a lista
+  }
+
   useEffect(() => {
     getUsuarios()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  return(
+  return (
     <div className='container'>
       <form>
-        <h1>Cadastro</h1>
-        <input id="nome" name='nome' type="text" />
-        <label for="nome"></label>
-        <input id="idade" name='idade' type="number" />
-        <label for="idade"></label>
-        <input id='email' name='email' type="email" />
-        <label for="email"></label>
-        <button type='button'>Cadastrar</button>
+        <h1>Cadastro de Usuários</h1>
+        <input placeholder='Digite seu nome' name='nome' type="text" ref={inputNome} />
+        <input placeholder='Digite sua idade' name='idade' type="number" ref={inputIdade} />
+        <input placeholder='Digite seu email' name='email' type="email" ref={inputEmail} />
+        <button onClick={createUsuarios} type='button'>Cadastrar</button>
       </form>
 
       {usuarios.map(usuario => (
         <div key={usuario.id} className='card'>
           <div>
-            <p>Nome:{usuario.nome}</p>
+            <p>Nome: {usuario.nome}</p>
             <p>Idade: {usuario.idade}</p>
-            <p>Email:{usuario.email}</p>
+            <p>Email: {usuario.email}</p>
           </div>
-          <button>
-            <img src={Lixeira}/>
+          <button onClick={() => deleteUsuarios(usuario.id)} className='btn-deletar'>
+            <img src={Lixeira} />
           </button>
+          {/* <button onClick={() => atualizaUsuarios(usuario.id)} className='btn-atualizar'>
+            <img src={Atualizar} />
+          </button> */}
         </div>
       ))}
     </div>
