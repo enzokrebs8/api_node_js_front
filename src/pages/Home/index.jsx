@@ -2,12 +2,7 @@ import './style.css'
 import { useEffect, useState, useRef } from 'react'
 import Lixeira from '../../assets/lixeira.svg'
 import api from '../../services/api'
-
-// import { useEffect, useState,  } from 'react'
-// import './style.css'
-// import Lixeira from '../../assets/lixeira.png'
-// import api from '../../services/api'
-// import Atualizar from '../../assets/atualiza.png'
+import Edit from '../../assets/edit.png'
 
 function Home(){
   // const usuarios =[
@@ -58,6 +53,20 @@ function Home(){
     getUsuarios()// <- atualiza a lista
   }
 
+    async function atualizaUsuarios(id) {
+    const atualNome = prompt('Alterar nome:')
+    const atualIdade = prompt('Alterar idade:')
+    const atualEmail = prompt('Alterar email:')
+    if (atualNome && atualIdade && atualEmail) {
+      await api.put(`/cadastro/${id}`, {
+        nome: atualNome,
+        idade: atualIdade,
+        email: atualEmail
+      })
+      getUsuarios()// <- atualiza a lista
+    }
+  }
+
   useEffect(() => {
     getUsuarios()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,9 +92,9 @@ function Home(){
           <button onClick={() => deleteUsuarios(usuario.id)} className='btn-deletar'>
             <img src={Lixeira} />
           </button>
-          {/* <button onClick={() => atualizaUsuarios(usuario.id)} className='btn-atualizar'>
-            <img src={Atualizar} />
-          </button> */}
+          {<button onClick={() => atualizaUsuarios(usuario.id)} className='btn-atualizar'>
+            <img src={Edit} />
+          </button>}
         </div>
       ))}
     </div>
