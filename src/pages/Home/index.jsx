@@ -40,7 +40,7 @@ function Home(){
       idade: inputIdade.current.value,
       email: inputEmail.current.value
     })
-    getUsuarios()// <- atualiza a lista
+    getUsuarios() // Atualizar a lista dinamicamente
 
     //vai limpar os campos
     inputNome.current.value = ""
@@ -50,7 +50,7 @@ function Home(){
 
   async function deleteUsuarios(id) {
     await api.delete(`/cadastro/${id}`)
-    getUsuarios()// <- atualiza a lista
+    getUsuarios()
   }
 
     async function atualizaUsuarios(id) {
@@ -63,7 +63,7 @@ function Home(){
         idade: atualIdade,
         email: atualEmail
       })
-      getUsuarios()// <- atualiza a lista
+      getUsuarios() 
     }
   }
 
@@ -76,9 +76,9 @@ function Home(){
     <div className='container'>
       <form>
         <h1>Cadastro de Usuários</h1>
-        <input placeholder='Digite seu nome' name='nome' type="text" ref={inputNome} />
-        <input placeholder='Digite sua idade' name='idade' type="number" ref={inputIdade} />
-        <input placeholder='Digite seu email' name='email' type="email" ref={inputEmail} />
+        <input placeholder='Digite seu nome:' name='nome' type="text" ref={inputNome} />
+        <input placeholder='Digite sua idade:' name='idade' type="number" ref={inputIdade} />
+        <input placeholder='Digite seu email:' name='email' type="email" ref={inputEmail} />
         <button onClick={createUsuarios} type='button'>Cadastrar</button>
       </form>
 
