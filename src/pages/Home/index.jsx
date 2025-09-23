@@ -18,7 +18,7 @@ function Home(){
   //   }
   // ]
 
-  const [usuariosState, setUsuariosState] = useState([])
+  const [usuarios, setUsuarios] = useState([])
 
   //let usuarios = []
 
